@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List Application</title> <!--Title for our app-->
+  <link rel="stylesheet" href="./style.css"> <!--Link to css file-->
+  <script src="https://kit.fontawesome.com/a9bb59d2d6.js" crossorigin="anonymous"></script> <!--Link to fontawesome for icons-->
+</head>
+<body>
+  <section>
+    <div class="wrapper"> <!--Wrapper to wrap the whole app.-->
+        <div class="task-input"> <!--Where the inputting of tasks will be-->
+          <i class="fa-solid fa-bars-staggered"></i> <!--Our Icon-->
+          <input type="text" placeholder="Add a Task">
+        </div>
+        <div class="controls"> <!--Div with the controls options-->
+            <div class="filters"> <!--The div with our filters (all, ongoing, done)-->
+              <span class="active" id="all">All</span> <!--Filter for all tasks-->
+              <span id="ongoing">Ongoing</span> <!--Filter for Ongoing tasks-->
+              <span id="done">Done</span> <!--Filter for Done tasks-->
+            </div>
+            <button class="clear-btn">Clear All Tasks</button>
+        </div>
+        <ul class="tasks-box"></ul> <!--Box showing all our tasks-->
+    </div>
+  </section>
+
+  <script src="./script.js"></script> <!--Link to our script,js file for functionality-->
+  
+</body>
+</html>
