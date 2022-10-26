@@ -60,7 +60,8 @@ your html code will look like this:
 ## style.css
 
 This file helps format our page and will end up making it look something like this:
-![picofApp](https://user-images.githubusercontent.com/115345791/197986588-27cb63a6-a639-4e28-93f9-6ec691d59e6e.jpg)
+![Screenshot_1](https://user-images.githubusercontent.com/115345791/197991695-577f6c68-5bf4-478a-bf97-c83238e2c434.jpg)
+
 
 we start by setting our font and overall page settings, i used Roboto but you can use whichever one you like:
 ```css
@@ -274,3 +275,36 @@ After that the task box that will contain all our tasks is also styled, this inc
 }
 
 ```
+
+## Finally script.js:
+This file handles the functionality of this app, the adding, the deleteing and the editing and such.
+
+so we first start by getting a few queries and setting some stuff up.
+```js 
+const taskInput = document.querySelector(".task-input input"), //The task to be inputed
+filters = document.querySelectorAll(".filters span"), //the filter currently chosen
+clearAll = document.querySelector(".clear-btn"), //clear all tasks button
+tasksBox = document.querySelector(".tasks-box"); // the box with all the tasks
+
+let editId, //the id of task when editing
+isEditTask = false, //false until needed to be true
+todos = JSON.parse(localStorage.getItem("todo-list"));  //something, if i had to guess saves our tasks in json format
+```
+To change the filter on click we write up a code that checks if a span is clicked, then if one is clicked it sets it as the active one and shows the tasks related to it:
+
+```js
+filters.forEach(btn => { //when any of the filters are selected
+    btn.addEventListener("click", () => { //when they are clicked 
+        document.querySelector("span.active").classList.remove("active"); //finds the span with the active class and removes it from them
+        btn.classList.add("active"); //adds the active class to the selected filter
+        showTodo(btn.id); //call showTodo
+    });
+});
+```
+
+Then the function showTodo is created. it is responsible for showing the tasks for each filter.
+
+
+we then create a variable liTag that will house all our tasks one by one. 
+
+if there exists task then it will start showing the tasks, and for each one that exists 
