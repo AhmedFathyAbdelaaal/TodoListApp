@@ -308,3 +308,40 @@ Then the function showTodo is created. it is responsible for showing the tasks f
 we then create a variable liTag that will house all our tasks one by one. 
 
 if there exists task then it will start showing the tasks, and for each one that exists 
+
+```js
+function showTodo(filter) { //function showTodo to show taks according to the filter
+    let liTag = ""; //variable liTag
+    if(todos) { //if there are tasks already in the system.
+        todos.forEach((todo, id) => { //for each task that exists, while padding on the task itself and its id
+            let done = todo.status == "done" ? "checked" : ""; //see if the task is done or not.
+            if(filter == todo.status || filter == "all") { //if the filter is all or todo.status
+                //this will just add this to the html file live, you wwont see it in the code but it will take effect.
+                //Here is there is a list element, with a label inside for the checking box and the task itself.
+                //Then there is a div of settings that has the settings that can be chosen on the side of the task
+                //The settings menu is itself a list with 2 elements, edit and delete.
+                liTag += `<li class="task">
+                            <label for="${id}">
+                                <input onclick="updateStatus(this)" type="checkbox" id="${id}" ${done}>
+                                <p class="${done}">${todo.name}</p>
+                            </label>
+                            <div class="settings">
+                                <i onclick="showMenu(this)" class="fa-solid fa-ellipsis"></i>
+                                <ul class="task-menu">
+                                    <li onclick='editTask(${id}, "${todo.name}")'><i class="fa-solid fa-pen"></i>Edit</li>
+                                    <li onclick='deleteTask(${id}, "${filter}")'><i class="fa-solid fa-trash"></i>Delete</li>
+                                </ul>
+                            </div>
+                        </li>`;
+            }
+        });
+    }
+    tasksBox.innerHTML = liTag || `<span>You don't have any task here</span>`; //It will the liTag set up there or that you dont have any tasks if no tasks are in the system.
+    let checkTask = tasksBox.querySelectorAll(".task");   //The task as defined in the if above
+    !checkTask.length ? clearAll.classList.remove("active") : clearAll.classList.add("active"); //if the task doesnt have length it will remove active but add it is it has length
+    tasksBox.offsetHeight >= 300 ? tasksBox.classList.add("overflow") : tasksBox.classList.remove("overflow"); //set height of the task box to fit the new task
+}
+showTodo("all"); //show all of the tasks
+```
+
+the showTodo("all") at the end is there to start the program.
