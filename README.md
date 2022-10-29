@@ -307,7 +307,11 @@ Then the function showTodo is created. it is responsible for showing the tasks f
 
 we then create a variable liTag that will house all our tasks one by one. 
 
-if there exists task then it will start showing the tasks, and for each one that exists 
+if there exists task then it will start showing the tasks, and for each one that exists it will be added to the liTag.
+
+if there are no tasks, the liTag wont get added and instead the text "You dont have any task here" will be shown.
+
+checkTask check a the task element, if the task doesnt have length it will remove active but add it is it has length.
 
 ```js
 function showTodo(filter) { //function showTodo to show taks according to the filter
@@ -345,3 +349,112 @@ showTodo("all"); //show all of the tasks
 ```
 
 the showTodo("all") at the end is there to start the program.
+
+Now we do the showMenu Function: that takes the selectedTask, and shows its settings. it adds the show class to the menuDiv.
+
+```js
+function showMenu(selectedTask) {  //when the settings icon is hit, it will do this function
+    let menuDiv = selectedTask.parentElement.lastElementChild; //menu div variable
+    menuDiv.classList.add("show"); //adds the show class to menuDiv
+    document.addEventListener("click", e => { //if cliked 
+        if(e.target.tagName != "I" || e.target != selectedTask) { //
+            menuDiv.classList.remove("show"); //remove the show class from menuDiv if not the correct place  to click
+        }
+    });
+}
+```
+
+Then we do the updateStatus Function, to update the task status of a selectedTask.
+
+it will check if the selectedTask is checked, if it is add the class checked to it and change status to done in the todos.
+
+Else we remove checked and then add the status ongoing to the todos.
+
+```js
+function updateStatus(selectedTask) { //update status function
+    let taskName = selectedTask.parentElement.lastElementChild; //make taskName the lastElementChild of selectedTask.
+    if(selectedTask.checked) { //if the task got done
+        taskName.classList.add("checked"); //mark it as checked and add that class
+        todos[selectedTask.id].status = "done"; //set status to done
+    } else { //else
+        taskName.classList.remove("checked"); //remove the checked class
+        todos[selectedTask.id].status = "ongoing"; //change it to ongoing status
+    }
+    localStorage.setItem("todo-list", JSON.stringify(todos)) ; //update todo list appropriately
+}
+
+```
+
+Then the editTask function is created:
+
+it takes the taskID and textName, we will make the task editable, change it and make it active to be able to change it.
+
+```js
+function editTask(taskId, textName) { //edit task function, uses taskID and textName
+    editId = taskId; //set editID as taskID 
+    isEditTask = true; //make it editable 
+    taskInput.value = textName; //set TaskInput to textName
+    taskInput.focus(); //focus on taskInput
+    taskInput.classList.add("active"); //add active class to taskInput
+}
+
+```
+
+Then the deletion of the task is done: it takes and id and filter.
+
+make the task undeditable.
+
+then delete it from todos.
+
+then save the JSON file and show the new tasks.
+
+```js
+function deleteTask(deleteId, filter) { //delete task function, uses deleteID and filter
+    isEditTask = false; //set editable to false
+    todos.splice(deleteId, 1); //splice the todos list hence deleting the task with the deleteId needed to be removed
+    localStorage.setItem("todo-list", JSON.stringify(todos)); //update the todo list json file
+    showTodo(filter); //show the todo list with the filter that was there already
+}
+```
+
+We add the event listener for clearing all items:
+we set tasks to not be editable then we delete everything out and save the JSON. then we show the new task.
+
+```js
+clearAll.addEventListener("click", () => { //when clear-btn is clicked
+    isEditTask = false; //editable becomes false 
+    todos.splice(0, todos.length); //splice everything out
+    localStorage.setItem("todo-list", JSON.stringify(todos)); //update the todo list json
+    showTodo() //show the empty todo list
+});
+```
+
+Finally we add the event listener of Keyup for inputing the task:
+
+we take the input of the user and trim it
+
+if the task isnt empty and the key is enter, then if the editing is not available then we check for todos then add the task to it and push it.
+else then it leads to editing to become false and change the todos[editID].name = userTask. 
+
+Then after all of that we clear the task input and save the json.
+
+then show the tasks.
+
+```js
+taskInput.addEventListener("keyup", e => { //when user presses enter it adds task
+    let userTask = taskInput.value.trim(); //trim the users input any unneccessary characters
+    if(e.key == "Enter" && userTask) { //if the input isnt empty and the key pressed is entet then
+        if(!isEditTask) { //if the editable is false then
+            todos = !todos ? [] : todos;  //todos are empty or not
+            let taskInfo = {name: userTask, status: "ongoing"}; //set task info
+            todos.push(taskInfo); //push task info
+        } else { //else if the editable is true
+            isEditTask = false;  //make it false 
+            todos[editId].name = userTask; //stop the editing
+        }
+        taskInput.value = ""; //make the input back to being empty
+        localStorage.setItem("todo-list", JSON.stringify(todos)); //update the todo list json
+        showTodo(document.querySelector("span.active").id); //show the todo list with the current filter
+    }
+});
+```
